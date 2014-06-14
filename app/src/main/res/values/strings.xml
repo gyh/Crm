@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Crm</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_add">添加</string>
+    <string name="action_time">选择时间</string>
+    <string name="action_phone">导入手机号</string>
+    <string name="action_save">保存</string>
+    <string name="action_adduser">添加客户</string>
+    <string name="action_userrecord">客户记录</string>
+    <string name="adduser_inputusername">客户姓名</string>
+    <string name="adduser_inputphone">客户手机号</string>
+    <string name="adduser_addphone">导入手机号</string>
+    <string name="adduser_adduserrecord">客户记录</string>
+    <string name="adduser_level">客户等级</string>
+    <string name="adduser_evaluation">客户评价</string>
+    <string-array name="timearr">
+        <item>选择日期</item>
+        <item>选择时间</item>
+    </string-array>
+    <string-array name="phonetypearr">
+        <item>来电</item>
+        <item>已拨</item>
+        <item>未接</item>
+    </string-array>
+</resources>
