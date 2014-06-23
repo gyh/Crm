@@ -24,6 +24,9 @@
         <activity android:name=".UserRecordActivity"
             android:label="@string/action_userrecord">
         </activity>
+        <activity android:name=".AddUserRecordActivity"
+            android:label="@string/action_userrecord">
+        </activity>
     </application>
 
 </manifest>

@@ -15,6 +15,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/activity_samll_margin"
+                android:layout_marginBottom="@dimen/activity_samll_margin">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="客户基本信息"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:layout_marginBottom="@dimen/activity_samll_padding"/>
+                <include layout="@layout/line_horizontal"></include>
+             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/username"
@@ -91,14 +105,27 @@
                     android:text="客户记录-----------
                     --------------------------------------"/>
             </LinearLayout>
-            <ListView
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/activity_samll_margin"
+                android:layout_marginBottom="@dimen/activity_samll_margin">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="客户咨询记录"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:layout_marginBottom="@dimen/activity_samll_padding"/>
+                <include layout="@layout/line_horizontal"></include>
+            </LinearLayout>
+            <com.gyh.crm.app.common.MyListView
                 android:id="@+id/listview"
                 android:layout_marginTop="@dimen/activity_samll_padding"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:divider="@color/crm_grad"
-                android:dividerHeight="@dimen/line_margin">
-             </ListView>
+                android:dividerHeight="@dimen/line_margin"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

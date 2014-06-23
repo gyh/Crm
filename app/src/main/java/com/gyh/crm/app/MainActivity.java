@@ -1,6 +1,7 @@
 package com.gyh.crm.app;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,10 +14,12 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gyh.crm.app.common.Base;
 import com.gyh.crm.app.common.BaseActivity;
 import com.gyh.crm.app.common.DBAdapter;
+import com.gyh.crm.app.common.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +45,13 @@ public class MainActivity extends BaseActivity {
                 intent.putExtra("userbase",baseList.get(i));
                 intent.setClass(MainActivity.this,UserRecordActivity.class);
                 startActivity(intent);
+            }
+        });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                deleteUser(baseList.get(i).getPhonenumber());
+                return true;
             }
         });
     }
@@ -94,6 +104,23 @@ public class MainActivity extends BaseActivity {
         }
         cursor.close();
         dbListAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 删除用户
+     * */
+    private  void deleteUser(final String phonenumber){
+        Utils.alertYesOrNo(this,"删除","是否删除此用户以及相关记录","是的","点错了",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                db.deleteUser(phonenumber);
+                getListDate();
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
     }
 
     class DBListAdapter extends BaseAdapter{

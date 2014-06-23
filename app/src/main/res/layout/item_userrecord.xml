@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/userrecord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:text="1233456778"
+        />
+    <TextView
+        android:id="@+id/usertime"
+        android:gravity="right"
+        android:layout_marginTop="@dimen/activity_samll_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="11sp"
+        android:textColor="@color/crm_grad"
+        android:text="2014年8月9日 23:20"/>
+</LinearLayout>

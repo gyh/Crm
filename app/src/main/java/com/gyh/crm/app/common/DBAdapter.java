@@ -113,8 +113,9 @@ public class DBAdapter {
         }
     }
 
-    public boolean deleteRecord(String phonenumber) {
-        if (db.delete(DATABASE_TABLE_RECORDLIST, KEY_PHONENUMBER + "=" + phonenumber, null) > 0) {
+    public boolean deleteRecord(String phonenumber,String usertime) {
+        if (db.delete(DATABASE_TABLE_RECORDLIST, KEY_PHONENUMBER + "=" + phonenumber+
+                " AND "+KEY_USERTIME + "=" + usertime, null) > 0) {
             return true;
         } else {
             return false;
