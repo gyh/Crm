@@ -4,7 +4,10 @@
     <string name="app_name">Crm</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_search">搜索</string>
     <string name="action_add">添加</string>
+    <string name="action_import">导入客户</string>
+    <string name="action_export">导出客户</string>
     <string name="action_time">选择时间</string>
     <string name="action_phone">导入手机号</string>
     <string name="action_save">保存</string>

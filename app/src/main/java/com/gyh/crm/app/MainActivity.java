@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.gyh.crm.app.common.Base;
 import com.gyh.crm.app.common.BaseActivity;
 import com.gyh.crm.app.common.DBAdapter;
+import com.gyh.crm.app.common.FileService;
 import com.gyh.crm.app.common.Utils;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class MainActivity extends BaseActivity {
     private ListView listView;
     private List<Base> baseList = new ArrayList<Base>();
     private DBListAdapter dbListAdapter ;
+    private FileService fileService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +40,7 @@ public class MainActivity extends BaseActivity {
         listView=(ListView)findViewById(R.id.listview);
         dbListAdapter=new DBListAdapter(this);
         listView.setAdapter(dbListAdapter);
+        fileService= new FileService();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -73,6 +76,29 @@ public class MainActivity extends BaseActivity {
         if (id == R.id.action_add) {
             startActivity(new Intent().setClass(MainActivity.this,AddUserActivity.class));
             return true;
+        }else if(id==R.id.action_search){
+            startActivity(new Intent().setClass(MainActivity.this,SearchActivity.class));
+            return true;
+        }else if(id==R.id.action_export){
+            if(fileService.ishasFile()){
+                Utils.alertYesOrNo(MainActivity.this,"提示","文件已存在，是否覆盖？","覆盖","点错了",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        fileService.saveToSDCard(getUserDBtoString());
+                        Toast.makeText(MainActivity.this,"导出成功",Toast.LENGTH_SHORT).show();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+            }else {
+                fileService.saveToSDCard(getUserDBtoString());
+                Toast.makeText(MainActivity.this,"导出成功",Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }else if(id==R.id.action_import){
+            setStringToUser(fileService.getFromSDCard());
         }
         return super.onOptionsItemSelected(item);
     }
@@ -121,6 +147,68 @@ public class MainActivity extends BaseActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
             }
         });
+    }
+
+
+    /**
+     * 将获取的数据解析成实体数据
+     * */
+    private void setStringToUser(String readstr){
+        String [] userlist= readstr.split("$");
+        for(int i=0;i<userlist.length;i++){
+            String[] userinfo=userlist[i].split("#");
+            String[] userinfos=userinfo[0].split("_");
+            Base base = new Base();
+            base.setUsertime(userinfos[0]);
+            base.setUsername(userinfos[1]);
+            base.setPhonenumber(userinfos[2]);
+            base.setUserlevel(userinfos[3]);
+            base.setUserev(userinfos[4]);
+            base.setUserrecord(userinfos[5]);
+            Toast.makeText(this,base.getUsername(),Toast.LENGTH_LONG).show();
+            String[] userinforecord=userinfo[1].split("@");
+        }
+    }
+
+    /**
+     * 将数据转换成字符串
+     * $ -- 隔开每个客户信息
+     * # -- 隔开客户信息和记录
+     * @ -- 隔开每条记录
+     * _ -- 隔开每个字段
+     * */
+    private String getUserDBtoString(){
+        String userstr="";
+        Cursor cursor =db.getUserList();
+        while (cursor.moveToNext()){
+            Base base = new Base();
+            base.setUsertime(cursor.getString(0));
+            base.setUsername(cursor.getString(1));
+            base.setPhonenumber(cursor.getString(2));
+            base.setUserlevel(cursor.getString(3));
+            base.setUserev(cursor.getString(4));
+            base.setUserrecord(cursor.getString(5));
+            userstr+=base.getUsertime()+"_"
+                    +base.getUsername()+"_"
+                    +base.getPhonenumber()+"_"
+                    +base.getUserlevel()+"_"
+                    +base.getUserev()+"_"
+                    +base.getUserrecord()+"#";
+            Cursor cursor1 = db.getRecordList(base.getPhonenumber());
+            while (cursor1.moveToNext()){
+                Base base1 = new Base();
+                base1.setUsertime(cursor1.getString(0));
+                base1.setPhonenumber(cursor1.getString(1));
+                base1.setUserrecord(cursor1.getString(2));
+                userstr+=base1.getUsertime()+"_"
+                        +base1.getPhonenumber()+"_"
+                        +base1.getUserrecord()+"@";
+            }
+            cursor1.close();
+            userstr+="$";
+        }
+        cursor.close();
+        return userstr;
     }
 
     class DBListAdapter extends BaseAdapter{

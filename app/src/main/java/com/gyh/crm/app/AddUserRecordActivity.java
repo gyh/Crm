@@ -12,10 +12,15 @@ import com.gyh.crm.app.common.BaseActivity;
 import com.gyh.crm.app.common.DBAdapter;
 import com.gyh.crm.app.common.Utils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by GYH on 2014/6/21.
  */
 public class AddUserRecordActivity extends BaseActivity{
+    String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+    Pattern p = Pattern.compile(regEx);
     private TextView userdate;
     private TextView usertime;
     private EditText userrecord;
@@ -72,6 +77,12 @@ public class AddUserRecordActivity extends BaseActivity{
         if(("").equals(userrecord.getText().toString())){
             isok=false;
             Toast.makeText(this,"客户记录不能为空！",Toast.LENGTH_SHORT).show();
+        }else {
+            Matcher userrecordm = p.matcher(userrecord.getText().toString());
+            if(userrecordm.find()){
+                isok=false;
+                Toast.makeText(this,"不能包含特殊字符！",Toast.LENGTH_SHORT).show();
+            }
         }
         return isok;
     }

@@ -25,6 +25,9 @@ import java.util.regex.Pattern;
  */
 public class AddUserActivity extends BaseActivity{
 
+    String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+    Pattern p = Pattern.compile(regEx);
+
     private TextView userdate;
     private TextView usertime;
     private EditText username;
@@ -92,6 +95,7 @@ public class AddUserActivity extends BaseActivity{
      * 检查数据是否正确
      * */
     private boolean checked(){
+
         boolean isok=true;
         if(("").equals(username.getText().toString())){
             isok=false;
@@ -111,7 +115,19 @@ public class AddUserActivity extends BaseActivity{
         }else if(!Utils.isPhoneNumberValid(userphone.getText().toString())){
             isok=false;
             Toast.makeText(this,"客户手机号输入错误！",Toast.LENGTH_SHORT).show();
+        }else {
+            Matcher usernamem = p.matcher(username.getText().toString());
+            Matcher userrecordm = p.matcher(userrecord.getText().toString());
+            if(usernamem.find()){
+                isok=false;
+                Toast.makeText(this,"不能包含特殊字符！",Toast.LENGTH_SHORT).show();
+            }else if(userrecordm.find()){
+                isok=false;
+                Toast.makeText(this,"不能包含特殊字符！",Toast.LENGTH_SHORT).show();
+            }
         }
+
+
         return isok;
     }
 
