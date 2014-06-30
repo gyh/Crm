@@ -113,17 +113,18 @@ public class DBAdapter {
         }
     }
 
-    public boolean deleteRecord(String phonenumber) {
-        if (db.delete(DATABASE_TABLE_RECORDLIST, KEY_PHONENUMBER + "=" + phonenumber, null) > 0) {
+    public boolean deleteRecord(String phonenumber,String usertime) {
+        if (db.delete(DATABASE_TABLE_RECORDLIST, KEY_PHONENUMBER + "=" + phonenumber+
+                " AND "+KEY_USERTIME + "=" + usertime, null) > 0) {
             return true;
         } else {
             return false;
         }
     }
 
-
-//---检索所有标题---
-
+    /**
+     * 获取全部客户信息
+     * */
     public Cursor getUserList() {
         return db.query(DATABASE_TABLE_USERLIST, new String[]{
                         KEY_USERTIME,
@@ -140,6 +141,9 @@ public class DBAdapter {
         );
     }
 
+    /**
+     * 根据手机号获取全部记录
+     * */
     public Cursor getRecordList(String phonenumber) {
         return db.query(DATABASE_TABLE_RECORDLIST, new String[]{
                         KEY_USERTIME,
@@ -153,13 +157,15 @@ public class DBAdapter {
                 null
         );
     }
-//---检索一个指定标题---
 
+    /**
+     * 查询指定的手机号
+     * */
     public Cursor getUser(String phonenumber) throws SQLException {
         Cursor mCursor = db.query(true, DATABASE_TABLE_USERLIST, new String[]{
                         KEY_USERTIME,
-                        KEY_PHONENUMBER,
                         KEY_USERNAME,
+                        KEY_PHONENUMBER,
                         KEY_USERLEVEL,
                         KEY_USEREV,
                         KEY_USERRECORD},
@@ -176,6 +182,30 @@ public class DBAdapter {
         return mCursor;
     }
 
+    /**
+     * 模糊查询手机号
+     * */
+    public Cursor getUserLikephone(String phonenumber) throws SQLException {
+        Cursor mCursor = db.query(true, DATABASE_TABLE_USERLIST, new String[]{
+                        KEY_USERTIME,
+                        KEY_USERNAME,
+                        KEY_PHONENUMBER,
+                        KEY_USERLEVEL,
+                        KEY_USEREV,
+                        KEY_USERRECORD},
+                KEY_PHONENUMBER + " LIKE '%" + phonenumber+"%'",
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        return mCursor;
+    }
+
+    /**
+     * 检查手机号是否存在
+     * */
     public boolean checkUser(String phonenumber) throws SQLException {
         Cursor mCursor = db.query(true, DATABASE_TABLE_USERLIST, new String[]{
                         KEY_PHONENUMBER
@@ -194,7 +224,9 @@ public class DBAdapter {
         }
     }
 
-    //---更新一个标题---
+    /**
+     * 更新数据
+     * */
     public boolean updateUser(String usertime, String username, String phonenumber,
                               String userlevel, String userev, String userrecord) {
         ContentValues initialValues = new ContentValues();
