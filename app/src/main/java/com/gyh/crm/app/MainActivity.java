@@ -27,6 +27,9 @@ import java.util.List;
 
 
 public class MainActivity extends BaseActivity {
+
+    private final static String FILENAME = "crmuser.txt";
+
     private DBAdapter db = new DBAdapter(this);
     private ListView listView;
     private List<Base> baseList = new ArrayList<Base>();
@@ -40,7 +43,7 @@ public class MainActivity extends BaseActivity {
         listView=(ListView)findViewById(R.id.listview);
         dbListAdapter=new DBListAdapter(this);
         listView.setAdapter(dbListAdapter);
-        fileService= new FileService();
+        fileService= new FileService(FILENAME);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -99,6 +102,8 @@ public class MainActivity extends BaseActivity {
             return true;
         }else if(id==R.id.action_import){
             setStringToUser(fileService.getFromSDCard());
+        }else if(id==R.id.action_temp){
+            startActivity(new Intent().setClass(MainActivity.this,TempImportOrExportActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -154,19 +159,37 @@ public class MainActivity extends BaseActivity {
      * 将获取的数据解析成实体数据
      * */
     private void setStringToUser(String readstr){
-        String [] userlist= readstr.split("$");
-        for(int i=0;i<userlist.length;i++){
-            String[] userinfo=userlist[i].split("#");
-            String[] userinfos=userinfo[0].split("_");
-            Base base = new Base();
-            base.setUsertime(userinfos[0]);
-            base.setUsername(userinfos[1]);
-            base.setPhonenumber(userinfos[2]);
-            base.setUserlevel(userinfos[3]);
-            base.setUserev(userinfos[4]);
-            base.setUserrecord(userinfos[5]);
-            Toast.makeText(this,base.getUsername(),Toast.LENGTH_LONG).show();
-            String[] userinforecord=userinfo[1].split("@");
+        List<Base> tempList = new ArrayList<Base>();
+//        String[] userlist = readstr.split("#");
+//        for(int i=0;i<userlist.length;i++){
+//            Base base = new Base();
+//            base.setUsername(userlist[0]);
+//            base.setPhonenumber(userlist[1]);
+//            base.setUserrecord(userlist[2]);
+//            base.setUserlevel(userlist[3]);
+//            base.setUserev(userlist[4]);
+//            base.setUsertime(userlist[5]);
+//            tempList.add(base);
+//        }
+//
+//        for(int i=0;i<tempList.size();i++){
+//            for()
+//        }
+        if(!"".equals(readstr)&& readstr!=null){
+            String [] userlist= readstr.split("$");
+            for(int i=0;i<userlist.length;i++){
+                String[] userinfo=userlist[i].split("#");
+                String[] userinfos=userinfo[0].split("_");
+                Base base = new Base();
+                base.setUsertime(userinfos[0]);
+                base.setUsername(userinfos[1]);
+                base.setPhonenumber(userinfos[2]);
+                base.setUserlevel(userinfos[3]);
+                base.setUserev(userinfos[4]);
+                base.setUserrecord(userinfos[5]);
+                Toast.makeText(this,base.getUsername(),Toast.LENGTH_LONG).show();
+                String[] userinforecord=userinfo[1].split("@");
+            }
         }
     }
 

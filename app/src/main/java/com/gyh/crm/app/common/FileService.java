@@ -17,8 +17,13 @@ import android.util.Log;
 public class FileService {
 
     private String pathName = "/sdcard/crm/";
-    private String fileName = "crmuser.txt";
+//    private String fileName = "crmuser.txt";
+//    private String fileName = "strcustomerlist.txt";
+    private String fileName="";
 
+    public FileService(String fileName){
+        this.fileName=fileName;
+    }
 
     /**
      * 获取数据

@@ -19,6 +19,7 @@
     <string name="adduser_adduserrecord">客户记录</string>
     <string name="adduser_level">客户等级</string>
     <string name="adduser_evaluation">客户评价</string>
+    <string name="temp">过度导入</string>
     <string-array name="timearr">
         <item>选择日期</item>
         <item>选择时间</item>

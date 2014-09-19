@@ -22,4 +22,8 @@
         android:icon="@drawable/ic_action_new"
         android:orderInCategory="100"
         app:showAsAction="ifRoom|collapseActionView" />
+    <item android:id="@+id/action_temp"
+        android:title="@string/temp"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom|collapseActionView" />
 </menu>

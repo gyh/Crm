@@ -28,6 +28,8 @@
         <activity android:name=".AddUserRecordActivity"
             android:label="@string/action_userrecord">
         </activity>
+        <activity android:name=".TempImportOrExportActivity"
+            android:label="@string/temp"/>
         <activity android:name=".SearchActivity"
             android:label="@string/action_search">
             <meta-data android:name="android.app.searchable"
