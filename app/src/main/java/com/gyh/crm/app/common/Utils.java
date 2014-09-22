@@ -243,6 +243,32 @@ public class Utils {
                     DateFormat.is24HourFormat(baseActivity));
         }
     }
+
+    /**
+     * 将用户数据转换成字符串
+     * */
+    public static String setBaseToFileString(Base base){
+        String strfile = "";
+        strfile+=base.getUsertime()+"_"
+                +base.getUsername()+"_"
+                +base.getPhonenumber()+"_"
+                +base.getUserlevel()+"_"
+                +base.getUserev()+"_"
+                +base.getUserrecord()+"#";
+        return strfile;
+    }
+
+    /**
+     * 将用户信息转换成字符串
+     * */
+    public static String setInfoToFileString(Base base){
+        String strfile = "";
+        strfile+=base.getUsertime()+"_"
+                +base.getPhonenumber()+"_"
+                +base.getUserrecord()+"@";
+        return strfile;
+    }
+
     /**
      * 日期弹出窗口
      * */

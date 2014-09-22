@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gyh.crm.app.common.BaseActivity;
-import com.gyh.crm.app.common.DBAdapter;
 import com.gyh.crm.app.common.Utils;
 
 import java.util.regex.Matcher;
@@ -24,7 +23,6 @@ public class AddUserRecordActivity extends BaseActivity{
     private TextView userdate;
     private TextView usertime;
     private EditText userrecord;
-    private DBAdapter db = new DBAdapter(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,21 +30,7 @@ public class AddUserRecordActivity extends BaseActivity{
         setContentView(R.layout.activity_addrecord);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
-        db.open();
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        db.close();
-    }
-
     /**
      * 初始化布局
      * */

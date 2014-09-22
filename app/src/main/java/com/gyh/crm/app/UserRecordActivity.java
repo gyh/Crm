@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 
 import com.gyh.crm.app.common.Base;
 import com.gyh.crm.app.common.BaseActivity;
-import com.gyh.crm.app.common.DBAdapter;
+import com.gyh.crm.app.common.Constant;
 import com.gyh.crm.app.common.Utils;
 
 import java.util.ArrayList;
@@ -28,8 +29,6 @@ import java.util.List;
  * Created by GYH on 2014/6/8.
  */
 public class UserRecordActivity extends BaseActivity{
-
-    private DBAdapter db = new DBAdapter(this);
     private Base base;
     private TextView username;
     private TextView usertime;
@@ -45,16 +44,10 @@ public class UserRecordActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userrecord);
-        db.open();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         base=(Base)getIntent().getSerializableExtra("userbase");
         initView();
 
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        db.close();
     }
     /**
      * 初始化布局
@@ -77,6 +70,13 @@ public class UserRecordActivity extends BaseActivity{
         userrecord=(TextView)findViewById(R.id.userrecord);
         ratingBarlevel=(RatingBar)findViewById(R.id.ratingbarlevel);
         ratingBarev=(RatingBar)findViewById(R.id.ratingbarev);
+        setViewData();
+    }
+
+    /**
+     * 设置View的数据
+     * */
+    private void setViewData(){
         username.setText(base.getUsername());
         userphone.setText(base.getPhonenumber());
         usertime.setText(base.getUsertime());
@@ -93,7 +93,7 @@ public class UserRecordActivity extends BaseActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.updateuser, menu);
         return true;
     }
 
@@ -102,12 +102,33 @@ public class UserRecordActivity extends BaseActivity{
         int id = item.getItemId();
         if (id == R.id.action_add) {
             Intent intent = new Intent();
-            intent.setClass(UserRecordActivity.this,AddUserRecordActivity.class);
+            intent.setClass(UserRecordActivity.this, AddUserRecordActivity.class);
             intent.putExtra("phonenumber",base.getPhonenumber());
             startActivity(intent);
             return true;
+        }else if(id == R.id.action_update){
+            Intent intent = new Intent();
+            intent.setClass(UserRecordActivity.this,AddUserActivity.class);
+            intent.putExtra(Constant.ExtraKeyName.OPERATIONTYPE,Constant.ExtraKeyValue.OPERATIONTYPE_UPDATE);
+            intent.putExtra(Constant.IntentValueType.BASETYPE,base);
+            startActivityForResult(intent,Constant.RequestCode.USERRECORD_TO_ADDUSER);
+            return true;
+        }else if(id == R.id.action_call){
+            Intent intent = new Intent("android.intent.action.CALL", Uri.parse("tel:" + base.getPhonenumber()));
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == Constant.RequestCode.USERRECORD_TO_ADDUSER){
+            if(resultCode == RESULT_OK){
+                base = (Base) data.getSerializableExtra(Constant.IntentValueType.BASETYPE);
+                setViewData();
+            }
+        }
     }
 
     /**

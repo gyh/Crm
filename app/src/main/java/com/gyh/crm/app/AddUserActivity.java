@@ -2,10 +2,7 @@ package com.gyh.crm.app;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -13,8 +10,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gyh.crm.app.common.Base;
 import com.gyh.crm.app.common.BaseActivity;
-import com.gyh.crm.app.common.DBAdapter;
+import com.gyh.crm.app.common.Constant;
 import com.gyh.crm.app.common.Utils;
 
 import java.util.regex.Matcher;
@@ -25,7 +23,7 @@ import java.util.regex.Pattern;
  */
 public class AddUserActivity extends BaseActivity{
 
-    String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+    String regEx = "[`~@#$%^&*()+=|{}''\\[\\].<>/~@#￥%……&*——+|{}【】_]";
     Pattern p = Pattern.compile(regEx);
 
     private TextView userdate;
@@ -35,15 +33,16 @@ public class AddUserActivity extends BaseActivity{
     private EditText userrecord;
     private RatingBar ratingBarlevel;
     private RatingBar ratingBarev;
-    private DBAdapter db = new DBAdapter(this);
+
+    private String OPERATIONTYPE = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adduser);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        OPERATIONTYPE = getIntent().getStringExtra(Constant.ExtraKeyName.OPERATIONTYPE);
         initView();
-        db.open();
     }
 
     @Override
@@ -51,13 +50,6 @@ public class AddUserActivity extends BaseActivity{
         super.onStart();
 
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        db.close();
-    }
-
     /**
      * 初始化布局
      * */
@@ -71,20 +63,52 @@ public class AddUserActivity extends BaseActivity{
         ratingBarev=(RatingBar)findViewById(R.id.ratingbarev);
         usertime.setText(Utils.getTime());
         userdate.setText(Utils.getDate());
+        if(OPERATIONTYPE.equals(Constant.ExtraKeyValue.OPERATIONTYPE_UPDATE)){
+            Base base = (Base)getIntent().getSerializableExtra(Constant.IntentValueType.BASETYPE);
+            username.setText(base.getUsername());
+            userphone.setText(base.getPhonenumber());
+            userphone.setEnabled(false);
+            userrecord.setText(base.getUserrecord());
+            String[] tempstr = base.getUsertime().split(" ");
+            userdate.setText(tempstr[0]);
+            usertime.setText(tempstr[1]);
+            ratingBarlevel.setRating(Float.valueOf(base.getUserlevel()));
+            ratingBarev.setRating(Float.valueOf(base.getUserev()));
+        }
     }
     /**
      * 保存数据,usertime,username,userphone,userlevel,userev,userrecord
      * */
     private void save(){
         if(checked()){
-            boolean saveok=db.insertUser(userdate.getText().toString()+" "+usertime.getText().toString()
-                    ,username.getText().toString()
-                    ,userphone.getText().toString()
-                    ,ratingBarlevel.getRating()+""
-                    ,ratingBarev.getRating()+""
-                    ,userrecord.getText().toString());
+            boolean saveok = false;
+            if(OPERATIONTYPE.equals(Constant.ExtraKeyValue.OPERATIONTYPE_ADD)){
+                saveok=db.insertUser(userdate.getText().toString()+" "+usertime.getText().toString()
+                        ,username.getText().toString()
+                        ,userphone.getText().toString()
+                        ,ratingBarlevel.getRating()+""
+                        ,ratingBarev.getRating()+""
+                        ,userrecord.getText().toString());
+            }else if (OPERATIONTYPE.equals(Constant.ExtraKeyValue.OPERATIONTYPE_UPDATE)){
+                saveok=db.updateUser(userdate.getText().toString()+" "+usertime.getText().toString()
+                        ,username.getText().toString()
+                        ,userphone.getText().toString()
+                        ,ratingBarlevel.getRating()+""
+                        ,ratingBarev.getRating()+""
+                        ,userrecord.getText().toString());
+            }
             if(saveok){
                 Toast.makeText(this,"保存成功",Toast.LENGTH_SHORT).show();
+                Base base = new Base();
+                base.setUsername(username.getText().toString());
+                base.setUserlevel(ratingBarlevel.getRating()+"");
+                base.setUserev(ratingBarev.getRating()+"");
+                base.setUsertime(userdate.getText().toString()+" "+usertime.getText().toString());
+                base.setPhonenumber(userphone.getText().toString());
+                base.setUserrecord(userrecord.getText().toString());
+                Intent intent = new Intent();
+                intent.putExtra(Constant.IntentValueType.BASETYPE,base);
+                setResult(RESULT_OK,intent);
                 finish();
             }else {
                 Toast.makeText(this,"手机号已经存在",Toast.LENGTH_SHORT).show();

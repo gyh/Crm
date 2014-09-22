@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.gyh.crm.app.R;
 import com.gyh.crm.app.common.Base;
 import com.gyh.crm.app.common.BaseActivity;
-import com.gyh.crm.app.common.DBAdapter;
 import com.gyh.crm.app.common.Utils;
 
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ import java.util.List;
  * Created by GYH on 2014/6/28.
  */
 public class SearchActivity extends BaseActivity implements SearchView.OnQueryTextListener {
-    private DBAdapter db = new DBAdapter(this);
     private ActionBar actionBar;
     private ListView listView;
     private List<Base> baseList = new ArrayList<Base>();
@@ -40,7 +38,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        db.open();
         actionBar=getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         listView=(ListView)findViewById(R.id.listview);
@@ -67,7 +64,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        db.close();
     }
 
     @Override
