@@ -227,7 +227,7 @@ public class Utils {
      * */
     public static class TimePickerFragment extends DialogFragment{
 
-        private BaseActivity baseActivity;
+        private  BaseActivity baseActivity;
         private TimePickerDialog.OnTimeSetListener onTimeSetListener;
         public TimePickerFragment(BaseActivity baseActivit, TimePickerDialog.OnTimeSetListener onTimeSetListener) {
             this.baseActivity = baseActivit;
@@ -241,6 +241,47 @@ public class Utils {
             int minute = c.get(Calendar.MINUTE);
             return new TimePickerDialog(baseActivity,onTimeSetListener, hour, minute,
                     DateFormat.is24HourFormat(baseActivity));
+        }
+    }
+
+    public static class FireMissilesDialogFragment extends DialogFragment {
+        /**
+         * 创建Fragment对话框实例
+         *
+         * @param title：指定对话框的标题。
+         * @return：Fragment对话框实例。
+         */
+        public static FireMissilesDialogFragment newInstance(String title) {
+            FireMissilesDialogFragment frag = new FireMissilesDialogFragment();
+            Bundle args = new Bundle();
+            // 自定义的标题
+            args.putString("title", title);
+            frag.setArguments(args);
+            return frag;
+        }
+
+        /*
+         * 覆写Fragment类的onCreateDialog方法，在DialogFragment的show方法执行之后， 系统会调用这个回调方法。
+         */
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // 获取对象实例化时传入的窗口标题。
+            String title = getArguments().getString("title");
+            // 用builder创建对话框
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(title);
+            builder.setPositiveButton("fire", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // FIRE ZE MISSILES!
+                }
+            });
+            builder.setNegativeButton("cancle", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User cancelled the dialog
+                }
+            });
+            // 创建一个dialog对象并返回
+            return builder.create();
         }
     }
 

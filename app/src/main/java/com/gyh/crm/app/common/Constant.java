@@ -23,4 +23,6 @@ public class Constant {
         public final static String OPERATIONTYPE_UPDATE ="update";
     }
 
+    public static final String regEx = "[`~@#$%^&*()+=|{}''\\[\\].<>/~@#￥%……&*——+|{}【】_]";
+
 }

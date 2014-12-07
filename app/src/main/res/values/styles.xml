@@ -4,12 +4,5 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:buttonStyle">@style/My.Widget.Button</item>
-    </style>
-
-    <!-- 按钮自定义样式 -->
-    <style name="My.Widget.Button" parent="@android:style/Widget.Holo.Button">
-        <item name="android:background">@drawable/btn_default_holo_light</item>
-        <item name="android:textColor">#FFFFFF</item>
     </style>
 </resources>

@@ -1,17 +1,19 @@
 package com.gyh.crm.app.common;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
+import com.baidu.mobstat.StatService;
 import com.gyh.crm.app.MainActivity;
 
 /**
  * Created by guoyuehua on 14-5-30.
  */
-public class BaseActivity extends ActionBarActivity{
+public class BaseActivity extends ActionBarActivity {
     protected DBAdapter db = new DBAdapter(this);
     //带内容的转圈
     private ProgressDialog msgProgressDialog;
@@ -28,6 +30,27 @@ public class BaseActivity extends ActionBarActivity{
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void onResume() {
+        super.onResume();
+
+        /**
+         * 页面起始（每个Activity中都需要添加，如果有继承的父Activity中已经添加了该调用，那么子Activity中务必不能添加）
+         * 不能与StatService.onPageStart一级onPageEnd函数交叉使用
+         */
+        StatService.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+
+        /**
+         * 页面结束（每个Activity中都需要添加，如果有继承的父Activity中已经添加了该调用，那么子Activity中务必不能添加）
+         * 不能与StatService.onPageStart一级onPageEnd函数交叉使用
+         */
+        StatService.onPause(this);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

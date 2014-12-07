@@ -1,5 +1,6 @@
 package com.gyh.crm.app;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,8 +24,8 @@ import java.util.regex.Pattern;
  */
 public class AddUserActivity extends BaseActivity{
 
-    String regEx = "[`~@#$%^&*()+=|{}''\\[\\].<>/~@#￥%……&*——+|{}【】_]";
-    Pattern p = Pattern.compile(regEx);
+
+    Pattern p = Pattern.compile(Constant.regEx);
 
     private TextView userdate;
     private TextView usertime;
@@ -40,7 +41,7 @@ public class AddUserActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adduser);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         OPERATIONTYPE = getIntent().getStringExtra(Constant.ExtraKeyName.OPERATIONTYPE);
         initView();
     }
@@ -53,6 +54,7 @@ public class AddUserActivity extends BaseActivity{
     /**
      * 初始化布局
      * */
+    @SuppressLint("WrongViewCast")
     private void initView(){
         userdate=(TextView)findViewById(R.id.userdate);
         usertime=(TextView)findViewById(R.id.usertime);

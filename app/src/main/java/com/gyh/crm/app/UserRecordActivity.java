@@ -44,7 +44,7 @@ public class UserRecordActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userrecord);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         base=(Base)getIntent().getSerializableExtra("userbase");
         initView();
 
@@ -86,7 +86,7 @@ public class UserRecordActivity extends BaseActivity{
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         initDate();
     }

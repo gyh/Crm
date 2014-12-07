@@ -30,7 +30,7 @@ public class TempImportOrExportActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tempimportorexport);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         fileUserService = new FileService(FILENAME);
         fileUserInfoService  = new FileService(FILENAME2);
         getUserListDate();

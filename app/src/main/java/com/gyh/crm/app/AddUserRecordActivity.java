@@ -1,5 +1,6 @@
 package com.gyh.crm.app;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gyh.crm.app.common.BaseActivity;
+import com.gyh.crm.app.common.Constant;
 import com.gyh.crm.app.common.Utils;
 
 import java.util.regex.Matcher;
@@ -18,8 +20,7 @@ import java.util.regex.Pattern;
  * Created by GYH on 2014/6/21.
  */
 public class AddUserRecordActivity extends BaseActivity{
-    String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
-    Pattern p = Pattern.compile(regEx);
+    Pattern p = Pattern.compile(Constant.regEx);
     private TextView userdate;
     private TextView usertime;
     private EditText userrecord;
@@ -28,12 +29,13 @@ public class AddUserRecordActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addrecord);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         initView();
     }
     /**
      * 初始化布局
      * */
+    @SuppressLint("WrongViewCast")
     private void initView(){
         userdate=(TextView)findViewById(R.id.userdate);
         usertime=(TextView)findViewById(R.id.usertime);

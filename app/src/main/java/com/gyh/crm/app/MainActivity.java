@@ -1,23 +1,34 @@
 package com.gyh.crm.app;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.kirin.CheckUpdateListener;
+import com.baidu.kirin.PostChoiceListener;
+import com.baidu.kirin.StatUpdateAgent;
+import com.baidu.kirin.objects.KirinCheckState;
+import com.baidu.mobstat.SendStrategyEnum;
+import com.baidu.mobstat.StatService;
 import com.gyh.crm.app.common.Base;
 import com.gyh.crm.app.common.BaseActivity;
 import com.gyh.crm.app.common.Constant;
@@ -25,19 +36,31 @@ import com.gyh.crm.app.common.DBService;
 import com.gyh.crm.app.common.FileService;
 import com.gyh.crm.app.common.Utils;
 import com.gyh.crm.app.listener.DBServiceListener;
+import com.gyh.crm.app.utils.DownloadCompleteReceiver;
+import com.gyh.crm.app.utils.UpdateDialog;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements CheckUpdateListener,PostChoiceListener {
 
     private final static String FILENAME = "crmuser.txt";
     private ListView listView;
     private List<Base> baseList = new ArrayList<Base>();
     private DBListAdapter dbListAdapter;
     private FileService fileService;
-
+    private UpdateDialog utestUpdate;
+    private CheckUpdateListener mCheckUpdateResponse;
+    private PostChoiceListener mPostUpdateChoiceListener;
+    private DownloadCompleteReceiver receiver;//接受下载完成的广播
     Handler myHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -51,6 +74,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        receiver = new DownloadCompleteReceiver();//创建下载完毕接收器
         listView = (ListView) findViewById(R.id.listview);
         dbListAdapter = new DBListAdapter(this);
         listView.setAdapter(dbListAdapter);
@@ -71,6 +95,29 @@ public class MainActivity extends BaseActivity {
                 return true;
             }
         });
+        setBaiduTongji();
+    }
+
+    /**
+     * 设置百度移动统计
+     * */
+    private void setBaiduTongji(){
+        StatService.setSessionTimeOut(30);
+        StatService.setLogSenderDelayed(30);
+        StatService.setSendLogStrategy(this, SendStrategyEnum.APP_START, 1, false);
+        StatService.setAppChannel(this,	"Baidu Market",	true);
+        // 小流量发布相关---------------------start------------------------------------------------------
+        // 这些设置以及检查更新的代码需要在StatService的系列设置调用之后才行（如果使用了setAppChannel来设置渠道
+        // ，起码必须在setAppChannel之后）
+        mCheckUpdateResponse = this;
+        mPostUpdateChoiceListener = this;
+        utestUpdate = new UpdateDialog(this, getResources().getString(R.string.app_name),mPostUpdateChoiceListener);
+        StatUpdateAgent.setTestMode(); // 打开小流量调试模式，在该模式下，不受更新频率设置的影响。如果不设置测试模式，那么请求间隔默认每天会请求一次
+
+        // 小流量检查是否有更新，该调用必须在setAppChannel之后调用才可以。启动调用的时候，第二个参数设置true，此时每天启动只提示一次
+//        StatUpdateAgent.postUserChoice(MainActivity.this,4,mPostUpdateChoiceListener);
+        StatUpdateAgent.checkUpdate(MainActivity.this, true,mCheckUpdateResponse);
+
     }
 
 
@@ -112,16 +159,21 @@ public class MainActivity extends BaseActivity {
             return true;
         } else if (id == R.id.action_import) {
             setStringToUser(fileService.getFromSDCard());
-        } else if (id == R.id.action_temp) {
-            startActivity(new Intent().setClass(MainActivity.this, TempImportOrExportActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         getListDate();
+        registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
     }
 
     /**
@@ -144,6 +196,7 @@ public class MainActivity extends BaseActivity {
             baseList.add(base);
         }
         cursor.close();
+        Collections.reverse(baseList);
         dbListAdapter.notifyDataSetChanged();
     }
 
@@ -265,6 +318,60 @@ public class MainActivity extends BaseActivity {
         db.insertRecord(tempitem.getUsertime()
                 , tempitem.getPhonenumber()
                 , tempitem.getUserrecord());
+    }
+
+    @Override
+    public void checkUpdateResponse(KirinCheckState state,HashMap<String, String> dataContainer) {
+        // TODO Auto-generated method stub
+        if (state == KirinCheckState.ALREADY_UP_TO_DATE) {
+            Log.d("demodemo", "stat == KirinCheckState.ALREADY_UP_TO_DATE");
+            // KirinAgent.postUserChoice(getApplicationContext(),
+            // choice);//choice 几种升级类型：0-未更新，1-不更新，2-稍后更新，3-手动更新，4-强制更新
+        } else if (state == KirinCheckState.ERROR_CHECK_VERSION) {
+            Log.d("demodemo", "KirinCheckState.ERROR_CHECK_VERSION");
+        } else if (state == KirinCheckState.NEWER_VERSION_FOUND) {
+            Log.d("demodemo", "KirinCheckState.NEWER_VERSION_FOUND"
+                    + dataContainer.toString());
+
+            String isForce = dataContainer.get("updatetype");
+            String noteInfo = dataContainer.get("note");
+            String publicTime = dataContainer.get("time");
+            String appUrl = dataContainer.get("appurl");
+            String appName = dataContainer.get("appname");
+            String newVersionName = dataContainer.get("version");
+            String newVersionCode = dataContainer.get("buildid");
+            String attachInfo = dataContainer.get("attach");
+
+            // 这些信息都是在mtj.baidu.com上您选择的小流量定制信息
+            utestUpdate.doUpdate(appUrl, noteInfo);
+        }
+    }
+
+    @Override
+    public void PostUpdateChoiceResponse(JSONObject jsonObject) {
+        try {
+            if("1".equals(jsonObject.getString("isdown"))){
+                DownloadManager manager =(DownloadManager)this.getSystemService(DOWNLOAD_SERVICE); //初始化下载管理器
+                String url = jsonObject.getString("downloadUrl");
+                Uri resource = Uri.parse(url);
+                DownloadManager.Request request = new DownloadManager.Request(resource);
+                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
+                request.setAllowedOverRoaming(false);
+                //设置文件类型
+                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                String mimeString = mimeTypeMap.getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(url));
+                request.setMimeType(mimeString);
+                //在通知栏中显示
+                request.setShowRunningNotification(true);
+                request.setVisibleInDownloadsUi(true);
+                //sdcard的目录下的download文件夹
+                request.setDestinationInExternalPublicDir("/download/", "crm.apk");
+                request.setTitle("crm.apk");
+                manager.enqueue(request);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 

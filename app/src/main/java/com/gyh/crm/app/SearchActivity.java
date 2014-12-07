@@ -29,7 +29,7 @@ import java.util.List;
  * Created by GYH on 2014/6/28.
  */
 public class SearchActivity extends BaseActivity implements SearchView.OnQueryTextListener {
-    private ActionBar actionBar;
+    private android.app.ActionBar actionBar;
     private ListView listView;
     private List<Base> baseList = new ArrayList<Base>();
     private DBListAdapter dbListAdapter ;
@@ -38,7 +38,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        actionBar=getSupportActionBar();
+        actionBar=getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         listView=(ListView)findViewById(R.id.listview);
         dbListAdapter=new DBListAdapter(this);
