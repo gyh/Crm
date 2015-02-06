@@ -11,7 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/library" />
             <option value="$PROJECT_DIR$/library/frame" />
-            <option value="$PROJECT_DIR$/library/frame/fragmentstack" />
+            <option value="$PROJECT_DIR$/library/frame/framesystem" />
           </set>
         </option>
       </GradleProjectSettings>

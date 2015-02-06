@@ -1,4 +1,4 @@
-package com.gyh.crm.app.common;
+package frame.system.seven.common.bean;
 
 import java.io.Serializable;
 

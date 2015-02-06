@@ -17,9 +17,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    signingConfigs {
+
+        myConfig {
+            storeFile file("Key.store")
+            storePassword "guoyuehua"
+            keyAlias "crmkey"
+            keyPassword "guoyuehua"
+        }
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':library:frame:fragmentstack')
+    compile project(':library:frame:framesystem')
 }

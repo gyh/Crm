@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="crm_red">#DA4660</color>
+    <color name="crm_white">#ffffff</color>
+    <color name="crm_redmax">#841027</color>
+    <color name="crm_redmin">#F0747C</color>
+    <color name="crm_grad">#CCCCCC</color>
+    <color name="crm_black">#000000</color>
+</resources>

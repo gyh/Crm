@@ -1,4 +1,4 @@
-package com.gyh.crm.app.common;
+package frame.system.seven.common.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

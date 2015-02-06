@@ -29,23 +29,19 @@ import com.baidu.kirin.StatUpdateAgent;
 import com.baidu.kirin.objects.KirinCheckState;
 import com.baidu.mobstat.SendStrategyEnum;
 import com.baidu.mobstat.StatService;
-import com.gyh.crm.app.common.Base;
-import com.gyh.crm.app.common.BaseActivity;
-import com.gyh.crm.app.common.Constant;
-import com.gyh.crm.app.common.DBService;
-import com.gyh.crm.app.common.FileService;
-import com.gyh.crm.app.common.Utils;
-import com.gyh.crm.app.listener.DBServiceListener;
+import frame.system.seven.common.bean.Base;
+import frame.system.seven.common.base.BaseActivity;
+import frame.system.seven.common.utils.Constant;
+import frame.system.seven.common.helper.FileService;
+import frame.system.seven.common.utils.Utils;
 import com.gyh.crm.app.utils.DownloadCompleteReceiver;
 import com.gyh.crm.app.utils.UpdateDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 

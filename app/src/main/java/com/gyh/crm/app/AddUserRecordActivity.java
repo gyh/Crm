@@ -9,9 +9,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gyh.crm.app.common.BaseActivity;
-import com.gyh.crm.app.common.Constant;
-import com.gyh.crm.app.common.Utils;
+import frame.system.seven.common.base.BaseActivity;
+import frame.system.seven.common.utils.Constant;
+import frame.system.seven.common.utils.Utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

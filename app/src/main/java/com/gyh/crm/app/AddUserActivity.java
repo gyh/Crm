@@ -6,15 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gyh.crm.app.common.Base;
-import com.gyh.crm.app.common.BaseActivity;
-import com.gyh.crm.app.common.Constant;
-import com.gyh.crm.app.common.Utils;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import frame.system.seven.common.bean.Base;
+import frame.system.seven.common.base.BaseActivity;
+import frame.system.seven.common.utils.Constant;
+import frame.system.seven.common.utils.Utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,6 +28,7 @@ import java.util.regex.Pattern;
 public class AddUserActivity extends BaseActivity{
 
 
+    //特殊字符集
     Pattern p = Pattern.compile(Constant.regEx);
 
     private TextView userdate;
@@ -34,8 +38,9 @@ public class AddUserActivity extends BaseActivity{
     private EditText userrecord;
     private RatingBar ratingBarlevel;
     private RatingBar ratingBarev;
-
     private String OPERATIONTYPE = "";
+    //动画效果实体
+    private YoYo.YoYoString rope;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,7 @@ public class AddUserActivity extends BaseActivity{
         setContentView(R.layout.activity_adduser);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         OPERATIONTYPE = getIntent().getStringExtra(Constant.ExtraKeyName.OPERATIONTYPE);
+
         initView();
     }
 
@@ -121,47 +127,50 @@ public class AddUserActivity extends BaseActivity{
      * 检查数据是否正确
      * */
     private boolean checked(){
-
         boolean isok=true;
         if(("").equals(username.getText().toString())){
             isok=false;
-            Toast.makeText(this,"客户姓名不能为空！",Toast.LENGTH_SHORT).show();
+            setYoYoAnim(username,"客户姓名不能为空！");
         }else if(("").equals(userphone.getText().toString())){
             isok=false;
-            Toast.makeText(this,"客户手机号不能为空！",Toast.LENGTH_SHORT).show();
+            setYoYoAnim(userphone,"客户手机号不能为空！");
         }else if(("").equals(userrecord.getText().toString())){
             isok=false;
-            Toast.makeText(this,"客户记录不能为空！",Toast.LENGTH_SHORT).show();
+            setYoYoAnim(userrecord,"客户记录不能为空！");
         }else if(ratingBarev.getRating()==0.0){
             isok=false;
-            Toast.makeText(this,"客户评论不能为空！",Toast.LENGTH_SHORT).show();
+            setYoYoAnim(ratingBarev,"客户评论不能为空！");
         }else if(ratingBarlevel.getRating()==0.0){
             isok=false;
-            Toast.makeText(this,"客户等级不能为空！",Toast.LENGTH_SHORT).show();
+            setYoYoAnim(ratingBarlevel,"客户等级不能为空！");
         }else if(!Utils.isPhoneNumberValid(userphone.getText().toString())){
             isok=false;
-            Toast.makeText(this,"客户手机号输入错误！",Toast.LENGTH_SHORT).show();
+            setYoYoAnim(userphone,"客户手机号输入错误！");
         }else {
+            //查找用户和记录有没有特殊字符
             Matcher usernamem = p.matcher(username.getText().toString());
             Matcher userrecordm = p.matcher(userrecord.getText().toString());
             if(usernamem.find()){
                 isok=false;
-                Toast.makeText(this,"不能包含特殊字符！",Toast.LENGTH_SHORT).show();
+                setYoYoAnim(username,"不能包含特殊字符！");
             }else if(userrecordm.find()){
                 isok=false;
-                Toast.makeText(this,"不能包含特殊字符！",Toast.LENGTH_SHORT).show();
+                setYoYoAnim(userrecord,"不能包含特殊字符！");
             }
         }
-
-
         return isok;
     }
 
 
-
-
-
-
+    /**
+     * 界面效果
+     * */
+    private void setYoYoAnim(View view,String str){
+        if(view != null){
+            rope = YoYo.with(Techniques.Shake).duration(1000).playOn(view);
+        }
+        Toast.makeText(this,str,Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

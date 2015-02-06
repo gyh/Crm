@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,12 +14,10 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.gyh.crm.app.R;
-import com.gyh.crm.app.common.Base;
-import com.gyh.crm.app.common.BaseActivity;
-import com.gyh.crm.app.common.Utils;
+import frame.system.seven.common.bean.Base;
+import frame.system.seven.common.base.BaseActivity;
+import frame.system.seven.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

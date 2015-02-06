@@ -1,4 +1,4 @@
-package com.gyh.crm.app.common;
+package frame.system.seven.db;
 
 /**
  * Created by guoyuehua on 14-5-31.

@@ -1,14 +1,13 @@
-package com.gyh.crm.app.common;
+package frame.system.seven.common.base;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.baidu.mobstat.StatService;
-import com.gyh.crm.app.MainActivity;
+
+import frame.system.seven.db.DBAdapter;
 
 /**
  * Created by guoyuehua on 14-5-30.

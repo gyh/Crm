@@ -119,7 +119,7 @@
                     android:layout_marginBottom="@dimen/activity_samll_padding"/>
                 <include layout="@layout/line_horizontal"></include>
             </LinearLayout>
-            <com.gyh.crm.app.common.MyListView
+            <frame.system.seven.common.view.MyListView
                 android:id="@+id/listview"
                 android:layout_marginTop="@dimen/activity_samll_padding"
                 android:layout_width="match_parent"

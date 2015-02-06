@@ -6,9 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.gyh.crm.app.common.Base;
-import com.gyh.crm.app.common.BaseActivity;
-import com.gyh.crm.app.common.FileService;
+import frame.system.seven.common.bean.Base;
+import frame.system.seven.common.base.BaseActivity;
+import frame.system.seven.common.helper.FileService;
 
 import java.util.ArrayList;
 import java.util.List;

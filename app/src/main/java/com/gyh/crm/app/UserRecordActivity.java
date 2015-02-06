@@ -17,10 +17,10 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.gyh.crm.app.common.Base;
-import com.gyh.crm.app.common.BaseActivity;
-import com.gyh.crm.app.common.Constant;
-import com.gyh.crm.app.common.Utils;
+import frame.system.seven.common.bean.Base;
+import frame.system.seven.common.base.BaseActivity;
+import frame.system.seven.common.utils.Constant;
+import frame.system.seven.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

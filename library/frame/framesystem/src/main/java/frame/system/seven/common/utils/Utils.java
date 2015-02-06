@@ -1,4 +1,4 @@
-package com.gyh.crm.app.common;
+package frame.system.seven.common.utils;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -20,15 +20,16 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.gyh.crm.app.R;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import frame.system.seven.R;
+import frame.system.seven.common.base.BaseActivity;
+import frame.system.seven.common.bean.Base;
 
 /**
  * Created by guoyuehua on 14-5-30.

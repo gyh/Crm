@@ -1,4 +1,4 @@
-package com.gyh.crm.app.common;
+package frame.system.seven.common.helper;
 
 /**
  * Created by GYH on 2014/6/28.
